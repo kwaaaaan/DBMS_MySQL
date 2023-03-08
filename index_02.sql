@@ -102,3 +102,89 @@ SELECT * FROM customer WHERE birth >= '2000-01-01' ORDER BY custid DESC LIMIT 2;
 SELECT * FROM customer WHERE phone IS NULL; -- customer table에서 phone에 null값인 애들 조회
 SELECT * FROM customer WHERE phone IS NOT NULL; -- customer table에서 phone에 null값이 아닌애들 조회
 DESC customer; -- customer의 정보를 볼 수 있는 명령어
+
+-- <집계 함수>
+-- SUM, AVG, MIN, MAX, COUNT
+SELECT * FROM orders;
+-- 주문 테니블에서 총 주문건수 조회
+-- count(*) : NULL 및 중복값을 포함한 모든것을 카운트
+-- count(expression) : NULL인 값을 제외하고 카운트
+-- count(DISTINCT expression) : 중복 NULL값 제외 카운트
+SELECT count(*) FROM orders;
+SELECT count(orderid) FROM orders;
+
+SELECT count(*) FROM customer;
+SELECT count(phone) FROM customer;
+SELECT count(birth) FROM customer;
+
+SELECT * FROM customer;
+-- 주문 테이블에서 총 판매 개수 검색
+SELECT SUM(amount) FROM oreders;
+-- 주문 테이블에서 총 판매개수 검색 + 의미 있는 이름으로 변경
+SELECT sum(amount) AS 'total_amount' FROM orders; -- AS 없어도 됨
+SELECT sum(amount) 'total_amount' FROM orders; 
+SELECT sum(amount) total_amount FROM orders;
+SELECT sum(amount) AS total_amount FROM orders;
+-- 122, 123, 124, 125 다 똑같음
+
+-- 주문 테이블에서 총 판매 개수, 평균 판매 개수, 상품 최저가, 상품 최고가 검색
+-- 총 판매개수 : SUM(), 평균 판매개수 : AVG(), 상품 최저가 : MIN(), 상품 최고가 : MAX()
+SELECT SUM(amount) AS 'total_amount', 
+	AVG(amount) AS 'avg_amount',
+	MIN(price) AS 'min_price', 
+    MAX(price) AS 'max_price' 
+FROM orders; 
+
+-- GROUP BY : 속성이름끼리 그룹으로 묶는 역할
+-- HAVING : GROUP BY절의 결과를 나타내는 그룹을 제한
+SELECT * FROM orders;
+-- <GROUP BY>
+-- 고객별로 주문한 주문내역 건수 구하기
+SELECT custid, COUNT(*) FROM orders GROUP BY custid;
+-- 위에서 첫 번째 FROM 실행, 두번째 GROUP BY 실행, 3번째 SELECT 실행
+
+-- 고객별 주문한 상품 총 수량 구하기
+SELECT custid, SUM(amount) FROM orders GROUP BY custid;
+
+-- 고객별로 주문한 총 주문액 구하기
+SELECT custid, SUM(price * amount) FROM orders GROUP BY custid; 
+
+-- 상품별 판매 개수 구하기
+SELECT prodname, SUM(amount) FROM orders GROUP BY prodname;
+-- 상품별 판매 개수 구하기 + 정렬
+SELECT prodname, SUM(amount) AS 'total_amount' FROM orders GROUP BY prodname
+ORDER BY SUM(amount) DESC;
+SELECT prodname, SUM(amount) AS 'total_amount' FROM orders GROUP BY prodname
+ORDER BY 'total_amount' DESC;
+SELECT prodname, SUM(amount) AS '판매 개수' FROM orders GROUP BY prodname
+ORDER BY SUM(amount) DESC;
+
+-- 짝수 해에 태어난 고겍
+SELECT * FROM customer WHERE YEAR(birth)%2 = 0;
+-- 2000-02-22 다음날에 태어난 고객 조회
+-- DATE('2000-02-22') : '2000-02-22'문자 데이터를 날짜 데이터로 변환
+SELECT * FROM customer WHERE birth = DATE('2000-02-22') + 1;
+-- 홀수 해에 태어난 고객
+SELECT * FROM customer WHERE MOD(DAY(birth),2) = 1;
+
+
+-- <HAVING>
+-- GROUP BY 명령 이후 추가 조건을 걸고 싶을때 사용
+-- 총 주문액이 10,000원 이상인 고객에 대해 고객별로 주문한 상품 총 수량 구하기
+SELECT custid, SUM(amount) AS 'total_amount', SUM(price * amount) AS 'total_price'
+	FROM orders
+    GROUP BY custid
+    HAVING SUM(price * amount) >= 10000;
+    
+-- 총 주문액이 100000원 이상인 고객에 대해 고객별로 주문한 상품 총 수량 구하기(단, custid가 'bunny'인 경우 제외)
+SELECT custid, SUM(amount) AS 'total_amount', SUM(price * amount) AS 'total_price'
+	FROM orders
+    WHERE custid != 'bunny'
+    GROUP BY custid
+    HAVING SUM(price * amount) >= 10000;
+    
+    SELECT custid, SUM(amount) AS 'total_amount', SUM(price * amount) AS 'total_price'
+	FROM orders
+    GROUP BY custid
+    HAVING SUM(price * amount) >= 10000 AND custid != 'bunny';
+-- GROUP BY를 사용할 경우에는 보통 WHERE절을 함께 사용하지 않습니다~ cause where은 다 찾고, having은 한번 걸러진 애들에서 찾기 때문이죠
