@@ -97,3 +97,8 @@ SELECT * FROM customer LIMIT 5 OFFSET 1; -- 주의! LIMIT에서의 시작 숫자
 SELECT * FROM customer WHERE birth >= '2000-01-01' LIMIT 2;
 -- 2000년 이후 출생 고객 중에서 뒤의 2건만 조회하고 싶은 경우
 SELECT * FROM customer WHERE birth >= '2000-01-01' ORDER BY custid DESC LIMIT 2;
+
+-- <IS NULL>
+SELECT * FROM customer WHERE phone IS NULL; -- customer table에서 phone에 null값인 애들 조회
+SELECT * FROM customer WHERE phone IS NOT NULL; -- customer table에서 phone에 null값이 아닌애들 조회
+DESC customer; -- customer의 정보를 볼 수 있는 명령어
