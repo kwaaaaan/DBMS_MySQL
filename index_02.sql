@@ -188,3 +188,5 @@ SELECT custid, SUM(amount) AS 'total_amount', SUM(price * amount) AS 'total_pric
     GROUP BY custid
     HAVING SUM(price * amount) >= 10000 AND custid != 'bunny';
 -- GROUP BY를 사용할 경우에는 보통 WHERE절을 함께 사용하지 않습니다~ cause where은 다 찾고, having은 한번 걸러진 애들에서 찾기 때문이죠
+
+

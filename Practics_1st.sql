@@ -15,4 +15,4 @@ SELECT * FROM user ORDER BY age DESC LIMIT 3;
 -- 모든 회원 목록 중 나이가 25이상 50이하인 회원의 목록을 출력하시오.
 SELECT * FROM user WHERE age >= 25 and age <= 50;
 
-SELECT * FROM USER WHERE GENDER 
+SELECT * FROM USER WHERE GENDER
