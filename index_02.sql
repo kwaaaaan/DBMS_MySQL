@@ -41,7 +41,7 @@ SELECT * FROM customer WHERE addr = '대한민국 서울' OR addr = '영국 런�
 SELECT * FROM customer WHERE addr LIKE '대한민국 서울' OR addr LIKE '영국 런던';
 -- 주소가 서울 혹은 런던이 아닌 고객 검색
 SELECT * FROM customer WHERE addr NOT IN ('대한민국 서울', '영국 런던');
-SELECT * FROM customer WHERE addr != '대한민국 서울' OR addr != '영국 런던';
+SELECT * FROM customer WHERE addr != '대한민국 서울' and addr != '영국 런던';
 
 -- 패턴 (LIKE) : 특정 패턴을 포함하는 데이터를 검색할때 사용
 -- 주소가 '미국 로스앤젤레스'인 고객 검색
@@ -68,7 +68,7 @@ SELECT * FROM customer WHERE addr LIKE '대한민국%' AND birth >= '2000-01-01'
 -- 주소지가 미국이거나 영국인 고객 검색
 SELECT * FROM customer WHERE addr LIKE '미국%' OR addr LIKE '%영국%';
 -- 휴대폰 번호 마지막 자리가 4가 아닌 고객 검색
-SELECT * FROM customer WHERE phone NOT LIKE '%4' ;
+SELECT * FROM customer WHERE phone NOT LIKE '%4';
 
 -- < ORDER BY >
 -- ORDER BY절을 사용하지 않는경우, PK를 기준으로 정렬함
